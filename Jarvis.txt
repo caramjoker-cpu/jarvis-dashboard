@@ -1,0 +1,7 @@
+JARVIS V0.2 — Mise en ligne GitHub Pages
+1. Créer un dépôt GitHub public nommé jarvis-dashboard.
+2. Ajouter à la racine du dépôt les fichiers index.html, manifest.webmanifest, sw.js, icon-192.png et icon-512.png (pas le dossier parent).
+3. Settings > Pages > Build and deployment > Deploy from a branch > main / (root) > Save.
+4. Attendre la publication puis ouvrir https://VOTRE-PSEUDO.github.io/jarvis-dashboard/
+5. Sur iPad, ouvrir cette adresse dans Safari > Partager > Sur l’écran d’accueil.
+La météo nécessite Internet. Le module Transilien reste non connecté : aucune clé API ne doit être inscrite dans index.html.
