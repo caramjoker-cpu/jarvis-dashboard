@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#06101d"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><title>JARVIS · Dashboard V0.10</title>
+<style>
+:root{--cyan:#5fe7ff;--muted:#87aab9;--line:#1c5065;--panel:#0a2030d9}*{box-sizing:border-box}body{margin:0;background:#050c16;color:#e1f7ff;font:14px system-ui,-apple-system,sans-serif;min-height:100vh;background-image:radial-gradient(ellipse at 48% 5%,#12415b70,transparent 65%),linear-gradient(#0d253322 1px,transparent 1px),linear-gradient(90deg,#0d253322 1px,transparent 1px);background-size:auto,36px 36px,36px 36px}button,input,select{font:inherit}button{cursor:pointer;color:inherit}header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 26px;border-bottom:1px solid var(--line)}.brand{font-size:25px;letter-spacing:.25em;color:var(--cyan);font-weight:750;text-shadow:0 0 20px #24c7ff55}.micro{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.clock{font-size:30px;font-variant-numeric:tabular-nums;font-weight:650;text-align:right}nav{display:flex;gap:8px;padding:12px 26px;overflow:auto}nav button,.smallbtn{background:#0b2233;border:1px solid #225369;border-radius:8px;padding:11px 17px;white-space:nowrap}nav button.active,.smallbtn:hover{background:#123d50;border-color:var(--cyan);color:var(--cyan)}main{max-width:1500px;margin:auto;padding:12px 26px 35px}.heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.heading h1{font-size:19px;letter-spacing:.08em;margin:0}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.card{background:linear-gradient(145deg,#123347cc,var(--panel));border:1px solid var(--line);border-radius:12px;min-height:165px;padding:18px;position:relative;overflow:hidden;box-shadow:inset 0 1px #a0eaff14}.card:before{content:"";position:absolute;left:0;top:0;width:42px;height:2px;background:var(--cyan)}.card h2{font-size:12px;color:#8ed3e2;text-transform:uppercase;letter-spacing:.12em;margin:0 0 18px}.big{font-size:32px;color:var(--cyan);font-weight:750}.soft{color:var(--muted);line-height:1.6}.wide{grid-column:span 2}.status{font-size:11px;color:#e7b977;margin-top:12px}.btn{border:1px solid #33758c;background:#11394a;border-radius:7px;padding:9px 13px;margin-top:12px}.btn:focus-visible,nav button:focus-visible{outline:2px solid white}.footer{padding:12px 26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.green{color:#71edc4}.weatherIcon{font-size:32px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.input{background:#061622;color:white;border:1px solid #32637a;border-radius:6px;padding:9px;width:min(100%,280px)}.trainColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.trainDirection{border:1px solid #245269;border-radius:9px;padding:13px;background:#061b2a}.trainDirection h3{font-size:13px;color:var(--cyan);margin:0 0 12px}.trainItem{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #1c5065;padding:9px 0}.trainTime{font-size:20px;font-weight:750;color:#e1f7ff}.trainStatus{font-size:11px;color:#71edc4}.trainStatus.alert{color:#f3b276}.trainDelay{font-size:11px;color:#f3b276;margin-top:3px}.trainEmpty{padding:12px 0}.trainItem .sub{overflow-wrap:anywhere}.hidden{display:none}@media(max-width:650px){.trainColumns{grid-template-columns:1fr}}.sub{font-size:12px;color:#9cc2d0}a{color:var(--cyan)}@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wide{grid-column:span 2}}@media(max-width:520px){header{padding:15px}.brand{font-size:19px}.clock{font-size:23px}nav{padding:10px 15px}main{padding:10px 15px}.grid{gap:9px}.card{padding:13px;min-height:155px}.big{font-size:25px}.footer{padding:12px 15px}}@media(prefers-reduced-motion:no-preference){.card{transition:border-color .2s,transform .2s}.card:hover{border-color:#3c9bb2;transform:translateY(-2px)}} 
+
+.agendaList{display:grid;gap:8px}.agendaEvent{display:flex;gap:12px;align-items:flex-start;padding:11px;border:1px solid #245269;border-left:3px solid var(--cyan);border-radius:8px;background:#061b2a}.agendaEvent.primark{border-left-color:#efb46c}.agendaEvent.oeben{border-left-color:#5fe7ff}.agendaEvent.tillion{border-left-color:#7ee5a6}.agendaEvent.perso{border-left-color:#cba6ff}.agendaTime{min-width:100px;font-weight:750;color:#e1f7ff;font-variant-numeric:tabular-nums}.agendaDetails{flex:1;min-width:0}.agendaTitle{font-weight:700}.agendaControls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}.agendaControls input{width:auto}.agendaTag{font-size:11px;color:var(--muted)}.agendaEmpty{padding:16px;border:1px dashed #245269;border-radius:8px;color:var(--muted)}.agendaBadge{font-size:11px;color:#71edc4}.agendaEvent button{margin:0;padding:5px 9px}.agendaDay{padding:12px;border:1px solid #245269;border-radius:9px;background:#061b2a}.agendaDay h3{margin:0 0 9px;color:var(--cyan);font-size:14px}.agendaWeek{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.agendaWeek .agendaEvent{padding:8px;gap:7px}.agendaWeek .agendaTime{min-width:70px;font-size:12px}.agendaWeek .agendaTitle{font-size:12px}.agendaForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.agendaForm label{display:grid;gap:4px;font-size:12px;color:var(--muted)}.agendaForm input,.agendaForm select{width:100%;background:#061622;border:1px solid #32637a;color:white;border-radius:6px;padding:9px}.agendaForm .full{grid-column:span 2}@media(max-width:680px){.agendaWeek,.agendaForm{grid-template-columns:1fr}.agendaForm .full{grid-column:span 1}.agendaTime{min-width:82px}}
+
+.epsForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.epsForm label{display:grid;gap:5px;color:var(--muted);font-size:12px}
+.epsForm input,.epsForm select,.epsForm textarea{width:100%;background:#061622;color:#e1f7ff;border:1px solid #32637a;border-radius:7px;padding:10px;font:inherit}
+.epsForm textarea{min-height:90px;resize:vertical}
+.epsFull{grid-column:1/-1}
+.epsActions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.epsHint{padding:10px;border:1px solid #245269;border-radius:8px;margin:10px 0;color:var(--muted)}
+@media(max-width:650px){.epsForm{grid-template-columns:1fr}}
+
+.gymStats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.gymStats>div{border:1px solid #245269;border-radius:9px;padding:12px;text-align:center;display:grid;gap:5px}
+.gymStats b{font-size:25px;color:#7beaff}.gymStats span{font-size:11px;color:#9ab5c5}
+.gymForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.gymForm label{display:grid;gap:6px;font-size:12px;color:#a9c7d6}
+.gymForm input{min-width:0;width:100%;border:1px solid #32637a;background:#061622;color:#e1f7ff;border-radius:7px;padding:11px;font:inherit}
+.gymActions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.gymItem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #204154}
+.gymItem .btn{flex-shrink:0}
+@media(max-width:560px){.gymForm{grid-template-columns:1fr}.gymStats b{font-size:19px}}
+
+.benficaHero{display:grid;gap:10px;padding:16px;border:1px solid #7a3340;border-radius:10px;background:linear-gradient(120deg,#4b122444,#081725)}
+.benficaHero strong{font-size:22px;color:#fff}.benficaHero .big{color:#ff8393}
+.benficaForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.benficaForm label{display:grid;gap:5px;color:var(--muted);font-size:12px}
+.benficaForm input,.benficaForm select{width:100%;min-width:0;background:#061622;color:#e1f7ff;border:1px solid #32637a;border-radius:7px;padding:10px}
+.benficaLinks{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.benficaLinks a{border:1px solid #32637a;border-radius:7px;padding:10px;text-decoration:none}
+@media(max-width:600px){.benficaForm{grid-template-columns:1fr}}
+.benficaMatches{display:grid;gap:9px}.benficaRow{display:grid;gap:4px;padding:11px;border:1px solid #32637a;border-radius:8px;background:#06162266}.benficaRow strong{font-size:13px}.benficaScore{color:#ffb6c0;font-size:17px;padding:0 5px}.benficaTableWrap{overflow-x:auto}.benficaTable{width:100%;border-collapse:collapse;font-size:13px}.benficaTable th,.benficaTable td{padding:8px 10px;text-align:left;border-bottom:1px solid #32637a}.benficaUs{background:#74243855;color:#fff;font-weight:700}
+
+/* JARVIS V0.9 — accueil paysage sans défilement de la page */
+.deezerHomeActions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.deezerLink{display:inline-block;padding:9px 12px;border-radius:7px;background:#11394a;border:1px solid #33758c;text-decoration:none;color:#b4f6ff;font-weight:650}
+.deezerForm{display:grid;gap:10px}.deezerForm label{display:grid;gap:5px;color:var(--muted)}.deezerForm input{background:#061622;color:white;border:1px solid #32637a;border-radius:7px;padding:10px;width:100%;min-width:0}
+.deezerItems{display:grid;gap:8px;margin-top:14px}.deezerItem{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #32637a;border-radius:8px;padding:9px}.deezerItem a{overflow-wrap:anywhere}
+@media(orientation:landscape) and (min-width:950px) and (min-height:560px){
+ body.homeView{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ body.homeView header{padding:9px 20px;flex:0 0 auto}
+ body.homeView .brand{font-size:19px}
+ body.homeView .clock{font-size:21px}
+ body.homeView nav{padding:7px 20px;flex:0 0 auto}
+ body.homeView nav button{padding:7px 11px}
+ body.homeView main{flex:1 1 auto;min-height:0;max-width:1600px;width:100%;padding:5px 18px 7px;display:flex;flex-direction:column}
+ body.homeView .heading{margin:2px 0 7px;flex:0 0 auto}
+ body.homeView .heading h1{font-size:14px}
+ body.homeView #cards{flex:1;min-height:0;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:9px}
+ body.homeView .card{min-height:0;min-width:0;padding:11px;overflow:auto}
+ body.homeView .card h2{font-size:10px;margin:0 0 8px}
+ body.homeView .big{font-size:24px}
+ body.homeView .soft{line-height:1.3}
+ body.homeView .btn{padding:6px 9px;margin-top:7px;font-size:12px}
+ body.homeView .trainDirection{padding:7px}
+ body.homeView .trainDirection h3{margin-bottom:5px;font-size:12px}
+ body.homeView .trainItem{padding:5px 0}
+ body.homeView .trainTime{font-size:16px}
+ body.homeView .trainStatus{font-size:10px}
+ body.homeView .trainColumns{gap:7px}
+ body.homeView .gymStats{gap:4px;margin:6px 0}
+ body.homeView .gymStats>div{padding:6px}
+ body.homeView .gymStats b{font-size:17px}
+ body.homeView .benficaHero{padding:9px;gap:4px}
+ body.homeView .benficaHero strong{font-size:15px}
+ body.homeView .benficaHero .big{font-size:17px!important}
+ body.homeView .benficaHero .sub{font-size:10px}
+ body.homeView .footer{padding:5px 20px;flex:0 0 auto}
+}
+@media(orientation:landscape) and (min-width:950px) and (max-height:700px){
+ body.homeView .card{font-size:12px}
+ body.homeView .card .sub{font-size:10px}
+ body.homeView .card .status{margin-top:5px}
+ body.homeView .weatherIcon{font-size:22px}
+}
+
+/* V0.9 Kishta OS et bandeau système compact */
+.systemBanner{display:flex;align-items:center;gap:12px;border:1px solid #24617a;border-radius:9px;background:linear-gradient(90deg,#0b3643,#0a2030);padding:10px 16px;margin-bottom:11px;min-height:42px;color:#b9dfe8;font-size:12px;letter-spacing:.04em}
+.systemBanner[hidden]{display:none!important}.systemBanner strong{color:#78efc5;font-size:15px;letter-spacing:.12em}.systemDot{color:#78efc5}.systemBannerRight{margin-left:auto;color:#78efc5;font-size:10px;white-space:nowrap}
+.kishtaMini,.kishtaProfile{display:flex;align-items:center;gap:12px}.kishtaAvatar{width:60px;height:60px;border-radius:13px;object-fit:cover;border:1px solid #3b7d92;flex-shrink:0}.kishtaFallback{display:grid;place-items:center;background:#123b4b;font-size:30px}.kishtaProfile .kishtaAvatar{width:120px;height:120px}.kishtaProfile{margin-bottom:16px}.kishtaUpload{display:inline-block;margin-top:12px;border:1px solid #33758c;border-radius:7px;padding:9px;cursor:pointer;color:#a8ecfa}.kishtaUpload input{display:none}
+.kishtaForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}.kishtaForm label{display:grid;gap:5px;color:#a7c5d2;font-size:12px}.kishtaForm input,.kishtaForm textarea{width:100%;min-width:0;padding:10px;border-radius:7px;border:1px solid #32637a;background:#061622;color:white;font:inherit}.kishtaForm label:has(textarea){grid-column:1/-1}.kishtaStatus{font-size:20px;color:#7fe7ed;font-weight:750;margin:10px 0}.kishtaDue{color:#ffc37d!important}.kishtaMetrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.kishtaMetrics>div{display:grid;gap:6px;padding:12px;border:1px solid #32637a;border-radius:9px}.kishtaMetrics span{font-size:11px;color:#9cbac9}.kishtaMetrics strong{font-size:15px}.kishtaHistory{display:grid;gap:9px}.kishtaHistory>div{border-bottom:1px solid #245269;padding:7px}.kishtaMood{color:#7fe7ed;line-height:2}
+@media(max-width:560px){.kishtaForm{grid-template-columns:1fr}.kishtaMetrics strong{font-size:12px}.systemBanner{gap:6px;padding:8px;font-size:10px}.systemBannerRight{display:none}}
+@media(orientation:landscape) and (min-width:950px) and (min-height:560px){
+ body.homeView .systemBanner{padding:6px 12px;margin:0 0 5px;min-height:31px;flex:0 0 auto}
+ body.homeView #cards{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+ body.homeView .kishtaAvatar{width:42px;height:42px;font-size:22px}
+ body.homeView .kishtaMini{gap:8px}
+ body.homeView .kishtaMini .soft,body.homeView .kishtaMini .kishtaDue{font-size:12px}
+}
+
+/* V0.9 : deux lignes sur l'accueil, train large, sans carte Musculation */
+@media (orientation:landscape) and (min-width:950px) and (min-height:560px){
+ body.homeView #cards{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));}
+ body.homeView #cards>.card:nth-child(2){grid-column:span 2}
+ body.homeView #cards>.card:nth-child(3),body.homeView #cards>.card:nth-child(4),body.homeView #cards>.card:nth-child(5){grid-column:span 1}
+}
+/* Kishta : profil large, pâtée petite ; historique petit, BIOS large */
+body.kishtaView #cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+body.kishtaView #cards>.card:nth-child(1){grid-column:span 2}
+body.kishtaView #cards>.card:nth-child(2){grid-column:span 1}
+body.kishtaView #cards>.card:nth-child(3){grid-column:span 1}
+body.kishtaView #cards>.card:nth-child(4){grid-column:span 2}
+body.kishtaView .kishtaMetrics{grid-template-columns:1fr}
+body.kishtaView .kishtaStatus{font-size:17px}
+.biosPanel{display:grid;gap:10px}.biosStage{height:240px;position:relative;overflow:hidden;border:1px solid #29647c;border-radius:12px;background:radial-gradient(ellipse at 50% 75%,#124e5e66,transparent 62%),repeating-linear-gradient(0deg,transparent 0 11px,#43dbef08 12px 13px),#071724;display:grid;place-items:center}
+.biosStage:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(transparent 45%,#48dfff12 50%,transparent 55%);background-size:100% 18px;animation:biosScan 5s linear infinite}
+.biosCat{width:min(100%,350px);height:205px;filter:drop-shadow(0 0 11px #28c7ff7d);transition:transform .35s}.biosCat svg{width:100%;height:100%}.biosCat[data-angle="0"]{transform:scaleX(-1)}.biosCat[data-angle="1"]{transform:scaleX(.85)}.biosCat[data-angle="2"]{transform:scaleX(1)}.biosCat[data-angle="3"]{transform:scaleX(.65)}
+.catWalk{transform-origin:130px 125px;animation:catBounce .65s ease-in-out infinite alternate}.catLegA{transform-origin:106px 144px;animation:catStep .65s ease-in-out infinite alternate}.catLegB{transform-origin:162px 144px;animation:catStep .65s ease-in-out infinite alternate-reverse}.catTail{transform-origin:174px 123px;animation:catTail 1.5s ease-in-out infinite alternate}
+.biosHUD{position:absolute;top:12px;left:14px;font-size:11px;letter-spacing:.18em;color:#88f1ff}.biosHUD span{font-size:9px;letter-spacing:.08em;color:#8eabbf}.biosControls{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}.biosControls .btn{margin:0}.biosMood{display:flex;gap:8px;flex-wrap:wrap}.biosMood span{padding:8px 10px;border:1px solid #2b667a;border-radius:8px;font-size:11px;color:#9de6ec}.biosPanel h3{font-size:13px;color:#9de6ec;margin:7px 0 0}.biosAnecdotes{display:grid;gap:8px;max-height:210px;overflow:auto}.biosAnecdote{padding:9px 12px;border-left:2px solid #4bcedf;background:#092534;border-radius:6px}.biosAnecdote span{font-size:10px;color:#8eaebb;display:block}.biosAnecdote strong{font-size:13px}.biosAnecdote p{font-size:12px;margin:4px 0 0;color:#bcdbe5}.biosForm{display:grid;gap:8px}.biosForm label{display:grid;gap:5px;color:#a6c9d5;font-size:12px}.biosForm input,.biosForm textarea{width:100%;background:#061622;border:1px solid #32637a;border-radius:7px;color:#fff;padding:9px;font:inherit}.biosForm .btn{justify-self:start}
+@keyframes catBounce{to{transform:translateY(-4px)}}@keyframes catStep{to{transform:rotate(12deg)}}@keyframes catTail{to{transform:rotate(-10deg)}}@keyframes biosScan{to{background-position:0 18px}}
+@media(prefers-reduced-motion:reduce){.catWalk,.catLegA,.catLegB,.catTail,.biosStage:after{animation:none}}
+@media(max-width:800px){body.kishtaView #cards{grid-template-columns:repeat(2,minmax(0,1fr))}body.kishtaView #cards>.card:nth-child(1),body.kishtaView #cards>.card:nth-child(4){grid-column:span 2}body.kishtaView #cards>.card:nth-child(2),body.kishtaView #cards>.card:nth-child(3){grid-column:span 1}}
+@media(max-width:520px){body.kishtaView #cards{grid-template-columns:1fr}body.kishtaView #cards>.card:nth-child(n){grid-column:span 1}}
+
+.trainBadge{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-width:22px;height:21px;border-radius:4px;font-size:12px;font-weight:800;margin-left:5px;color:#fff;background:#465e6d;border:1px solid #70899b}.trainBadgeH{background:#6e388c;border-color:#b480d0}.trainBadgeC{background:#a67c0b;border-color:#efc54c;color:#fff}
+</style></head><body>
+<header><div><div class="brand">J.A.R.V.I.S.</div><div class="micro">Personal command interface · V0.10</div></div><div><div class="clock" id="clock">--:--:--</div><div class="micro" id="date" style="text-align:right"></div></div></header>
+<nav aria-label="Navigation"><button data-tab="Accueil" class="active">⌂ Accueil</button><button data-tab="EPS">▦ EPS</button><button data-tab="Sport">◇ Sport</button><button data-tab="Benfica">⚽ Benfica</button><button data-tab="Multimédia">♫ Multimédia</button><button data-tab="Kishta">🐈 Kishta</button><button data-tab="Réglages">⚙ Réglages</button></nav>
+<main><div id="systemBanner" class="systemBanner"><span class="systemDot">●</span><strong>ONLINE</strong><span>JARVIS SYSTEMS · Tous les systèmes opérationnels</span><span class="systemBannerRight">INTERFACE ACTIVE</span></div><div class="heading"><h1 id="pageTitle">CENTRE DE CONTRÔLE</h1><span class="micro green">● Interface active</span></div><div id="cards" class="grid"></div></main>
+<div class="footer"><span>JARVIS SYSTEMS · V0.10</span><span id="net">Météo active · Trains : connexion à configurer</span></div>
+<script>
+const $=id=>document.getElementById(id),state={tab:'Accueil',city:localStorage.getItem('jarvisCity')||'Paris',weather:null,weatherError:'',trains:null,trainError:'',trainUpdated:null,trainLoading:false,trainEndpoint:localStorage.getItem('jarvisTrainEndpoint')||''};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function tick(){let d=new Date();$('clock').textContent=d.toLocaleTimeString('fr-FR');$('date').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase()}tick();setInterval(tick,1000);
+function card(name,content,wide=false){return `<section class="card ${wide?'wide':''}"><h2>${name}</h2>${content}</section>`}
+function placeholder(label,detail){return `<div class="soft">${detail}</div><div class="status">◌ ${label} · À connecter dans une prochaine version</div>`}
+function weatherCard(){let w=state.weather;return card('☀ Météo · '+esc(state.city),w?`<div class="row"><span class="weatherIcon">${w.icon}</span><span class="big">${Math.round(w.temp)}°C</span></div><div class="soft">${esc(w.description)} · Vent ${Math.round(w.wind)} km/h</div><div class="sub">Actualisation toutes les 15 min</div>`:`<div class="soft">${esc(state.weatherError||'Chargement des données météo…')}</div><button class="btn" data-action="refresh">Réessayer</button>`)}
+function trainClock(value){
+ if(!value)return '--:--';
+ const date=new Date(value);
+ if(!Number.isNaN(date.getTime()))return new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit',hour12:false}).format(date);
+ return /^\d{1,2}:\d{2}$/.test(String(value))?String(value):'--:--';
+}
+function trainStatus(status){
+ const raw=String(status||'').trim();
+ const statuses={ontime:'À l’heure',delayed:'Retard',cancelled:'Supprimé',canceled:'Supprimé',early:'En avance',noreport:'Horaire théorique',unknown:'Horaire annoncé'};
+ return statuses[raw.toLowerCase()]||raw||'Horaire annoncé';
+}
+function trainDelay(train){
+ const expected=Date.parse(train.expected||train.time||'');
+ const scheduled=Date.parse(train.scheduled||'');
+ if(!Number.isFinite(expected)||!Number.isFinite(scheduled))return '';
+ const minutes=Math.round((expected-scheduled)/60000);
+ return minutes>0?`+${minutes} min de retard`:minutes<0?`${minutes} min d’avance`:'';
+}
+function trainLine(t){
+ const raw=String(t.line||t.lineName||t.route||t.routeName||t.lineCode||'').toUpperCase().trim();
+ if(/(?:RER\s*)?C(?:\b|$)/.test(raw)||raw.includes('RER C'))return 'C';
+ if(/(?:TRANSILIEN\s*)?H(?:\b|$)/.test(raw))return 'H';
+ return '?';
+}
+function sortedTrains(rows){
+ return [...rows].sort((a,b)=>{
+  const x=Date.parse(a.expected||a.time||''),y=Date.parse(b.expected||b.time||'');
+  return (Number.isFinite(x)?x:Infinity)-(Number.isFinite(y)?y:Infinity);
+ });
+}
+function upcomingTrains(rows){
+ const now=Date.now();
+ return sortedTrains(rows).filter(t=>{
+  const time=Date.parse(t.expected||t.time||'');
+  return !Number.isFinite(time)||time>=now-120000;
+ }).slice(0,5);
+}
+function trainCard(){
+ const groups=[['paris','→ Paris'],['pontoise','→ Pontoise']];
+ const sections=groups.map(([key,label])=>{
+  const rows=state.trains?.[key];
+  let content;
+  if(!Array.isArray(rows))content=`<div class="soft">${esc(state.trainError||'Connexion aux horaires à configurer.')}</div>`;
+  else if(!upcomingTrains(rows).length)content='<div class="soft trainEmpty">Aucun prochain train annoncé.</div>';
+  else content=upcomingTrains(rows).map(t=>{
+   const status=trainStatus(t.status);
+   const delay=trainDelay(t);
+    const alert=!['À l’heure','Horaire annoncé','Horaire théorique'].includes(status)||!!delay;
+   return `<div class="trainItem"><div><div class="trainTime">${esc(trainClock(t.expected||t.time))} <span class="trainBadge trainBadge${trainLine(t)}">${trainLine(t)==='?'?'—':trainLine(t)}</span></div><div class="sub">${esc(t.destination||label)}</div>${delay?`<div class="trainDelay">${esc(delay)}</div>`:''}</div><div class="trainStatus ${alert?'alert':''}">${esc(status)}</div></div>`;
+  }).join('');
+  return `<div class="trainDirection"><h3>${label}</h3>${content}</div>`;
+ }).join('');
+ const source=state.trains?'Île-de-France Mobilités · PRIM · lignes H/C selon flux':'API à connecter';
+ const updated=state.trainUpdated?'Dernière actualisation : '+esc(state.trainUpdated):'Aucun horaire en direct chargé';
+ const error=state.trainError&&state.trains?`<div class="status">${esc(state.trainError)}</div>`:'';
+ return card('🚆 Transilien · Franconville – Le Plessis-Bouchard',`<div class="trainColumns">${sections}</div><div class="row"><button class="btn" data-action="trains-refresh">↻ Actualiser</button><button class="btn" data-action="transit">⚙ Configurer</button></div><div class="sub">${updated} · Source : ${source} · Actualisation automatique : 60 s</div>${error}`,true)
+}
+async function fetchTrains(){
+ if(!state.trainEndpoint){state.trains=null;state.trainError='Ajoute une URL de service sécurisée dans Réglages.';render();return}
+ if(state.trainLoading)return;
+ state.trainLoading=true;
+ try{
+  const r=await fetch(state.trainEndpoint,{cache:'no-store'});
+  if(!r.ok)throw Error('HTTP '+r.status);
+  const data=await r.json();
+  if(data.error)throw Error(String(data.error));
+  if(!Array.isArray(data.paris)||!Array.isArray(data.pontoise))throw Error('Format inattendu : paris et pontoise doivent être des tableaux');
+  state.trains={paris:data.paris,pontoise:data.pontoise};
+  state.trainError='';
+  state.trainUpdated=new Date().toLocaleTimeString('fr-FR');
+ }catch(e){
+  state.trainError='Actualisation impossible : '+e.message+(state.trains?' (derniers horaires conservés)':'');
+ }finally{state.trainLoading=false;render()}
+}
+
+// Emploi du temps local : aucune information scolaire n'est envoyée à un serveur.
+const fixedSchedule=[
+ {day:1,start:'08:05',end:'09:55',title:'EPS · 4e ME1',place:'Collège Jean-François Oeben',type:'oeben'},
+ {day:1,start:'10:00',end:'12:00',title:'EPS · 5e ME4',place:'Collège Jean-François Oeben',type:'oeben'},
+ {day:1,start:'13:30',end:'15:20',title:'Natation · 6e Agatha et Manouchian',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:1,start:'15:35',end:'16:35',title:'EPS · 5e Jaurès',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:2,start:'13:25',end:'14:45',title:'EPS · 5e Austen',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:2,start:'15:35',end:'16:35',title:'Natation · 6e Orphée',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:3,start:'08:05',end:'09:55',title:'EPS · 4e ME1 (1 semaine sur 2)',place:'Collège Jean-François Oeben',type:'oeben',alternate:true},
+ {day:5,start:'08:55',end:'10:00',title:'EPS · 5e Austen',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:5,start:'10:00',end:'11:25',title:'EPS · 5e Jaurès',place:'Collège Germaine Tillion',type:'tillion'},
+ {day:0,start:'11:00',end:'20:00',title:'Travail · Primark',place:'Primark',type:'primark'}
+];
+const scheduleKey='jarvisV04PersonalEvents';
+let personalEvents=[];
+try{const stored=JSON.parse(localStorage.getItem(scheduleKey)||'[]');if(Array.isArray(stored))personalEvents=stored.filter(x=>x&&typeof x==='object').slice(0,300)}catch(e){}
+const localDayKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const dayFromKey=k=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(k||'');return m?new Date(+m[1],+m[2]-1,+m[3]):new Date(NaN)};
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+function wednesdayActive(date){const anchor=new Date(2026,9,14,12);const test=new Date(date.getFullYear(),date.getMonth(),date.getDate(),12);return Math.round((test-anchor)/86400000/7)%2===0}
+function eventsForDate(d){
+ const date=localDayKey(d);
+ const regular=fixedSchedule.filter(e=>e.day===d.getDay()&&(!e.alternate||wednesdayActive(d))).map(e=>({...e,date,personal:false}));
+ const custom=personalEvents.filter(e=>e.date===date).map(e=>({...e,type:'perso',place:e.place||'Événement personnel',personal:true}));
+ return regular.concat(custom).sort((a,b)=>a.start.localeCompare(b.start));
+}
+function formatDay(d){return d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}
+function eventMarkup(e){return `<div class="agendaEvent ${esc(e.type)}"><div class="agendaTime">${esc(e.start)}–${esc(e.end)}</div><div class="agendaDetails"><div class="agendaTitle">${esc(e.title)}</div><div class="agendaTag">${esc(e.place)}</div></div>${e.personal?`<button class="smallbtn" data-action="delete-event" data-id="${esc(e.id)}" aria-label="Supprimer cet événement">✕</button>`:''}</div>`}
+function nextEvent(){const now=new Date();for(let i=0;i<15;i++){const d=addDays(now,i);for(const e of eventsForDate(d)){const end=dayFromKey(e.date);const [h,m]=e.end.split(':').map(Number);end.setHours(h,m,0,0);if(end>now)return e}}return null}
+function agendaPreview(){const e=nextEvent();return card('▦ Agenda · Prochaine activité',e?`<div class="agendaBadge">${esc(formatDay(dayFromKey(e.date)))}</div><div class="big" style="font-size:23px">${esc(e.start)} – ${esc(e.end)}</div><div>${esc(e.title)}</div><div class="soft">${esc(e.place)}</div><button class="btn" data-action="open-agenda">Voir mon planning</button>`:'<div class="soft">Aucune activité prévue dans les 15 prochains jours.</div>',false)}
+function agendaPage(){
+ const today=new Date(),monday=addDays(today,-((today.getDay()+6)%7));
+ const days=Array.from({length:7},(_,i)=>addDays(monday,i));
+ const week=days.map(d=>`<div class="agendaDay"><h3>${esc(formatDay(d))}${localDayKey(d)===localDayKey(today)?' · Aujourd’hui':''}</h3><div class="agendaList">${eventsForDate(d).map(eventMarkup).join('')||'<div class="agendaTag">Aucun créneau</div>'}</div></div>`).join('');
+ return card('▦ Mon emploi du temps · Semaine en cours',`<div class="soft">Deux collèges, Primark et événements personnels. Mercredi Oeben une semaine sur deux, ancré au 14 octobre 2026.</div><div class="agendaWeek" style="margin-top:12px">${week}</div>`,true)+
+ card('＋ Ajouter un rendez-vous personnel',`<div class="agendaForm"><label>Date<input id="eventDate" type="date" value="${localDayKey(today)}"></label><label>Intitulé<input id="eventTitle" maxlength="100" placeholder="Rendez-vous, réunion…"></label><label>Début<input id="eventStart" type="time" value="09:00"></label><label>Fin<input id="eventEnd" type="time" value="10:00"></label><label class="full">Lieu (facultatif)<input id="eventPlace" maxlength="100" placeholder="Lieu"></label></div><button class="btn" data-action="add-event">Ajouter à JARVIS</button><p class="sub">Enregistrement local sur cet appareil uniquement. Ne constitue pas une synchronisation Google Agenda.</p>`,true)+
+ card('Google Agenda · Connexion à venir',`<div class="soft">La synchronisation privée de Google Agenda n’est pas encore activée. Nous ajouterons une connexion OAuth sécurisée, sans publier de jeton sur GitHub.</div><p><a href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer">Ouvrir Google Agenda ↗</a></p>`,true);
+}
+
+// Assistant EPS : fiches locales, sans noms d'élèves ni transmission au serveur.
+const epsStorageKey='jarvisEPSLessonsV041';
+let epsLessons={};
+try{const saved=JSON.parse(localStorage.getItem(epsStorageKey)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))epsLessons=saved}catch(e){}
+const epsCourses=fixedSchedule.filter(e=>e.type==='oeben'||e.type==='tillion').map((e,i)=>({...e,id:'eps-'+i}));
+let epsSelected=epsCourses[0]?.id||'';
+function nextEPSCourse(){
+ const now=new Date();
+ for(let i=0;i<15;i++){
+  const day=addDays(now,i);
+  for(const ev of eventsForDate(day)){
+   if(!['oeben','tillion'].includes(ev.type))continue;
+   const end=dayFromKey(ev.date);const [h,m]=ev.end.split(':').map(Number);end.setHours(h,m);
+   if(end>now){
+    return epsCourses.find(c=>c.day===ev.day&&c.start===ev.start&&c.title===ev.title)||
+      epsCourses.find(c=>c.day===day.getDay()&&c.start===ev.start&&c.title===ev.title);
+   }
+  }
+ }
+ return null;
+}
+function epsPage(){
+ const chosen=epsCourses.find(c=>c.id===epsSelected)||epsCourses[0];
+ const lesson=epsLessons[chosen?.id]||{};
+ const opts=epsCourses.map(c=>`<option value="${esc(c.id)}" ${chosen?.id===c.id?'selected':''}>${esc(['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'][c.day])} ${esc(c.start)} · ${esc(c.title)} · ${esc(c.place)}</option>`).join('');
+ const fields=[
+ ['apsa','APSA / activité','text','Basketball, natation, demi-fond…'],
+ ['numero','Numéro de séance','text','Ex. 5'],
+ ['objectif','Objectif de la séance','textarea','Ce que les élèves doivent apprendre'],
+ ['situation','Situations et organisation','textarea','Consignes, groupes, matériel, durée…'],
+ ['realisation','Critères de réalisation','textarea','Comment réaliser la tâche ?'],
+ ['reussite','Critères de réussite','textarea','Comment savoir si la tâche est réussie ?'],
+ ['bilan','Bilan après le cours','textarea','Réussites, difficultés, ajustements…']
+ ];
+ const form=fields.map(([id,label,type,placeholder])=>`<label class="${type==='textarea'?'epsFull':''}">${label}${type==='textarea'?`<textarea id="eps-${id}" maxlength="5000" placeholder="${esc(placeholder)}">${esc(lesson[id]||'')}</textarea>`:`<input id="eps-${id}" maxlength="180" value="${esc(lesson[id]||'')}" placeholder="${esc(placeholder)}">`}</label>`).join('');
+ return agendaPage()+card('🎓 Assistant EPS · Préparation de séance',`
+ <div class="soft">Sélectionne un créneau EPS, complète sa fiche et enregistre-la sur cet appareil. Les informations ne sont pas synchronisées entre tes appareils.</div>
+ <div class="epsActions"><button class="btn" data-action="prepare-eps">↗ Sélectionner mon prochain cours EPS</button></div>
+ <div class="epsHint">Les champs sont volontairement vides : aucune APSA ni situation pédagogique n'est inventée. Les fiches sont liées aux créneaux hebdomadaires, pas à une date précise.</div>
+ <div class="epsForm">
+ <label class="epsFull">Classe et créneau<select id="eps-course">${opts}</select></label>
+ <div class="epsFull sub">${esc(chosen?.place||'')} · ${esc(chosen?.start||'')}–${esc(chosen?.end||'')}${chosen?.alternate?' · Une semaine sur deux':''}</div>
+ ${form}
+ </div>
+ <div class="epsActions"><button class="btn" data-action="save-eps">💾 Enregistrer la fiche</button><button class="btn" data-action="copy-eps">⧉ Copier la fiche</button><button class="btn" data-action="clear-eps">Effacer cette fiche</button></div>
+ <div id="eps-feedback" class="sub" aria-live="polite">${lesson.savedAt?'Dernier enregistrement : '+esc(lesson.savedAt):'Aucune fiche enregistrée pour ce créneau.'}</div>`,true)+card('📚 CAPEPS',placeholder('Révisions','Entraînements et ressources'));
+}
+function epsReadForm(){
+ const result={};
+ for(const id of ['apsa','numero','objectif','situation','realisation','reussite','bilan'])result[id]=$('eps-'+id)?.value||'';
+ return result;
+}
+function epsSave(){
+ if(!epsSelected)return;
+ epsLessons[epsSelected]={...epsReadForm(),savedAt:new Date().toLocaleString('fr-FR')};
+ try{localStorage.setItem(epsStorageKey,JSON.stringify(epsLessons));$('eps-feedback').textContent='Fiche enregistrée sur cet appareil.'}
+ catch(e){alert('Enregistrement impossible : stockage local indisponible. Copie ta fiche pour la conserver.')}
+}
+function epsText(){
+ const c=epsCourses.find(x=>x.id===epsSelected),d=epsReadForm();
+ return [`FICHE EPS — ${c?.title||''}`,`Établissement : ${c?.place||''}`,`Créneau : ${c?.start||''}–${c?.end||''}`,`APSA : ${d.apsa}`,`Séance n° : ${d.numero}`,`Objectif : ${d.objectif}`,`Situations et organisation : ${d.situation}`,`Critères de réalisation : ${d.realisation}`,`Critères de réussite : ${d.reussite}`,`Bilan : ${d.bilan}`].join('\n\n');
+}
+
+
+// Journal de musculation local (aucun service externe).
+const gymKey='jarvisGymV05';
+let gymEntries=[];
+try{const v=JSON.parse(localStorage.getItem(gymKey)||'[]');if(Array.isArray(v))gymEntries=v.filter(x=>x&&typeof x==='object').slice(-1500)}catch(e){}
+function gymDate(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function gymSummary(){
+ const dates=new Set(gymEntries.map(x=>x.date));
+ const total=gymEntries.reduce((a,x)=>a+Number(x.sets||0),0);
+ return `<div class="gymStats"><div><b>${dates.size}</b><span>Jours entraînés</span></div><div><b>${gymEntries.length}</b><span>Exercices saisis</span></div><div><b>${total}</b><span>Séries enregistrées</span></div></div>`;
+}
+function gymCard(){return card('◇ Musculation',gymSummary()+`<div class="soft">Ton carnet d'entraînement est prêt. <button class="btn" data-action="open-gym">Ouvrir le suivi</button></div>`)}
+function gymPage(){
+ const ordered=[...gymEntries].sort((a,b)=>b.date.localeCompare(a.date)||b.created-a.created);
+ const history=ordered.length?ordered.slice(0,35).map(x=>`<div class="gymItem"><div><strong>${esc(x.exercise)}</strong><div class="sub">${esc(x.date)} · ${esc(x.sets)} × ${esc(x.reps)} répétitions · ${esc(x.weight)} kg${x.note?' · '+esc(x.note):''}</div></div><button class="btn" data-action="gym-delete" data-id="${esc(x.id)}" aria-label="Supprimer cette entrée">✕</button></div>`).join(''):'<div class="soft">Aucun entraînement enregistré pour le moment.</div>';
+ const records={};for(const x of gymEntries){const k=x.exercise.trim().toLocaleLowerCase('fr');if(!k)continue;const w=Number(x.weight);if(!records[k]||w>records[k].weight)records[k]={name:x.exercise,weight:w,reps:x.reps}}
+ const best=Object.values(records).sort((a,b)=>b.weight-a.weight).slice(0,8);
+ const bestHTML=best.length?best.map(x=>`<div class="gymItem"><strong>${esc(x.name)}</strong><span>${esc(x.weight)} kg · ${esc(x.reps)} reps</span></div>`).join(''):'<div class="soft">Tes meilleures charges apparaîtront ici.</div>';
+ return card('◇ Journal de musculation',gymSummary()+`<div class="soft">Enregistre une ligne par exercice. Pour plusieurs charges sur un même exercice, ajoute plusieurs lignes.</div><div class="gymForm"><label>Date<input id="gym-date" type="date" value="${gymDate()}"></label><label>Exercice<input id="gym-exercise" maxlength="80" placeholder="Ex. Développé couché"></label><label>Séries<input id="gym-sets" type="number" min="1" max="30" step="1" value="3"></label><label>Répétitions par série<input id="gym-reps" type="number" min="1" max="100" step="1" value="10"></label><label>Charge (kg)<input id="gym-weight" type="number" min="0" max="2000" step="0.5" value="0"></label><label>Note facultative<input id="gym-note" maxlength="180" placeholder="RPE, ressenti, machine…"></label></div><div class="gymActions"><button class="btn" data-action="gym-add">＋ Enregistrer l'exercice</button><button class="btn" data-action="gym-export">↓ Exporter mes données</button></div><div class="sub">Données enregistrées uniquement sur cet appareil. Pense à les exporter avant de supprimer JARVIS ou ses données Safari.</div>`,true)+card('🏆 Meilleures charges enregistrées',bestHTML)+card('📋 Historique récent',history)+benficaCard();
+}
+function gymAdd(){
+ const date=$('gym-date')?.value,exercise=$('gym-exercise')?.value.trim(),sets=Number($('gym-sets')?.value),reps=Number($('gym-reps')?.value),weight=Number($('gym-weight')?.value),note=$('gym-note')?.value.trim()||'';
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date||'')||!exercise||!Number.isInteger(sets)||sets<1||sets>30||!Number.isInteger(reps)||reps<1||reps>100||!Number.isFinite(weight)||weight<0||weight>2000){alert('Vérifie la date, le nom de l’exercice, les séries, les répétitions et la charge.');return}
+ if(gymEntries.length>=1500){alert('Limite atteinte : exporte tes données avant de continuer.');return}
+ gymEntries.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),created:Date.now(),date,exercise,sets,reps,weight,note});
+ try{localStorage.setItem(gymKey,JSON.stringify(gymEntries));render()}catch(e){gymEntries.pop();alert('Stockage indisponible : impossible d’enregistrer cette entrée.')}
+}
+function gymExport(){
+ const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),entries:gymEntries},null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='jarvis-musculation-'+gymDate()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+const BENFICA_ENDPOINT='https://jarvis-benfica.caramjoker.workers.dev/';
+let benficaData=null,benficaError='',benficaUpdated=0,benficaLoading=false;
+const BENFICA_CACHE='jarvisBenficaCacheV061';
+try{const saved=JSON.parse(localStorage.getItem(BENFICA_CACHE)||'null');if(saved&&saved.data&&Date.now()-saved.at<6*3600000){benficaData=saved.data;benficaUpdated=saved.at}}catch(e){}
+function benficaValidMatch(m){return m&&typeof m.utcDate==='string'&&Number.isFinite(new Date(m.utcDate).getTime())}
+function benficaNext(){return (benficaData?.nextMatches||[]).filter(benficaValidMatch).filter(m=>new Date(m.utcDate).getTime()>Date.now()-2*3600000).sort((a,b)=>new Date(a.utcDate)-new Date(b.utcDate))[0]||null}
+function benficaCountdown(){
+ const m=benficaNext();if(!m)return 'En attente du prochain match';
+ const diff=new Date(m.utcDate).getTime()-Date.now();if(diff<=0)return 'Match en cours ou débuté';
+ const days=Math.floor(diff/86400000),hours=Math.floor(diff%86400000/3600000),mins=Math.floor(diff%3600000/60000);
+ return days?`J−${days} · ${hours} h ${mins} min`:`Dans ${hours} h ${mins} min`;
+}
+function benficaOpponent(m){if(!m)return 'À confirmer';return /benfica/i.test(m.home||'')?m.away||'Adversaire à confirmer':m.home||'Adversaire à confirmer'}
+function benficaDate(s){const d=new Date(s);return Number.isFinite(d.getTime())?d.toLocaleString('fr-FR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'Date indisponible'}
+function benficaCard(){
+ const m=benficaNext(),home=m&&/benfica/i.test(m.home||'');
+ const status=benficaLoading?'Mise à jour en cours…':benficaError?'Actualisation indisponible · '+esc(benficaError):benficaData?'Données football-data.org · actualisées '+esc(new Date(benficaUpdated).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})):'Connexion au calendrier…';
+ return card('⚽ SL Benfica',`<div class="benficaHero"><strong>${m?`SL BENFICA ${home?'—':'@'} ${esc(benficaOpponent(m))}`:'SL BENFICA'}</strong><div class="soft">${m?`${esc(benficaDate(m.utcDate))} · ${esc(m.competition||'Compétition non précisée')}`:'Prochain match indisponible'}</div><div class="big" style="font-size:22px">${esc(benficaCountdown())}</div><div class="sub">${status}</div></div><button class="btn" data-action="open-benfica">Ouvrir le module Benfica</button>`);
+}
+function benficaMatchRows(matches,finished){
+ if(!matches?.length)return '<div class="soft">Aucune donnée disponible pour le moment.</div>';
+ return `<div class="benficaMatches">${matches.slice(0,5).map(m=>`<div class="benficaRow"><span>${esc(benficaDate(m.utcDate))}</span><strong>${esc(m.home||'—')} ${finished&&m.homeScore!=null&&m.awayScore!=null?`<span class="benficaScore">${m.homeScore} – ${m.awayScore}</span>`:'–'} ${esc(m.away||'—')}</strong><span class="sub">${esc(m.competition||'')}</span></div>`).join('')}</div>`;
+}
+function benficaPage(){
+ const last=(benficaData?.lastMatches||[]).filter(benficaValidMatch).sort((a,b)=>new Date(b.utcDate)-new Date(a.utcDate));
+ const next=(benficaData?.nextMatches||[]).filter(benficaValidMatch).sort((a,b)=>new Date(a.utcDate)-new Date(b.utcDate));
+ const standings=benficaData?.standings||[];
+ const rows=standings.length?`<div class="benficaTableWrap"><table class="benficaTable"><thead><tr><th>#</th><th>Club</th><th>MJ</th><th>Pts</th></tr></thead><tbody>${standings.map(r=>`<tr class="${/benfica/i.test(r.team||'')?'benficaUs':''}"><td>${Number(r.position)||'—'}</td><td>${esc(r.team||'—')}</td><td>${Number(r.played)||0}</td><td>${Number(r.points)||0}</td></tr>`).join('')}</tbody></table></div>`:'<div class="soft">Classement indisponible pour ce forfait ou cette période.</div>';
+ const errors=benficaData?.errors||{};
+ const info=Object.entries(errors).filter(([,v])=>v).map(([k,v])=>`${k} : ${v.status||'erreur'}`).join(' · ');
+ return benficaCard()+card('📅 Prochains matchs',benficaMatchRows(next,false),true)+card('🏁 Derniers résultats',benficaMatchRows(last,true),true)+card('🏆 Classement · Liga Portugal',rows,true)+card('🔄 Actualisation',`<div class="soft">Mise à jour automatique toutes les 10 minutes. Les heures sont affichées dans le fuseau horaire de ton appareil.</div>${info?`<div class="sub">Certaines données sont indisponibles : ${esc(info)}</div>`:''}<div class="benficaLinks"><button class="btn" data-action="refresh-benfica">Actualiser maintenant</button><a href="https://www.slbenfica.pt/" target="_blank" rel="noopener noreferrer">Benfica officiel ↗</a></div>`,true);
+}
+async function fetchBenfica(force=false){
+ if(benficaLoading||(!force&&Date.now()-benficaUpdated<10*60*1000))return;
+ benficaLoading=true;benficaError='';if(state.tab==='Benfica')render();
+ try{
+  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
+  let response;try{response=await fetch(BENFICA_ENDPOINT,{cache:'no-store',signal:controller.signal})}finally{clearTimeout(timeout)}
+  if(!response.ok)throw Error('Service HTTP '+response.status);
+  const data=await response.json();
+  if(!data||!Array.isArray(data.nextMatches)||!Array.isArray(data.lastMatches)||!Array.isArray(data.standings))throw Error('Format de réponse inattendu');
+  benficaData=data;benficaUpdated=Date.now();
+  try{localStorage.setItem(BENFICA_CACHE,JSON.stringify({data,at:benficaUpdated}))}catch(e){}
+ }catch(e){benficaError=e.name==='AbortError'?'Délai dépassé':e.message||'Erreur réseau'}
+ finally{benficaLoading=false;render()}
+}
+
+const deezerKey='jarvisDeezerLinksV07';
+let deezerLinks=[];
+try{const d=JSON.parse(localStorage.getItem(deezerKey)||'[]');if(Array.isArray(d))deezerLinks=d.filter(x=>x&&typeof x.title==='string'&&typeof x.url==='string').slice(0,12)}catch(e){}
+function deezerUrl(value){
+ try{const u=new URL(value);return u.protocol==='https:'&&(['deezer.com','www.deezer.com','link.deezer.com'].includes(u.hostname))?u.href:null}catch(e){return null}
+}
+function deezerCard(){
+ const first=deezerLinks[0];
+ return card('♫ Deezer',`<div class="soft">${first?'Mes favoris · '+deezerLinks.length+' raccourci(s)':'Accès rapide à ta musique'}</div><div class="deezerHomeActions">${first?`<a class="deezerLink" href="${esc(first.url)}" target="_blank" rel="noopener noreferrer">▶ ${esc(first.title)}</a>`:''}<button class="btn" data-action="open-deezer">Ouvrir Deezer</button></div>`);
+}
+function deezerPage(){
+ const links=deezerLinks.length?deezerLinks.map((x,i)=>`<div class="deezerItem"><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">♫ ${esc(x.title)}</a><button class="smallbtn" data-action="delete-deezer" data-index="${i}">Supprimer</button></div>`).join(''):'<div class="soft">Aucun raccourci enregistré.</div>';
+ return card('♫ Deezer · Mes raccourcis',`<p class="soft">Ouvre tes playlists, albums ou artistes dans Deezer. La lecture et le titre en cours restent gérés par Deezer : JARVIS n'accède pas à ton compte.</p><div class="deezerActions"><a class="deezerLink" href="https://www.deezer.com/" target="_blank" rel="noopener noreferrer">▶ Ouvrir Deezer</a></div><div class="deezerItems">${links}</div>`,true)+
+ card('＋ Ajouter un favori Deezer',`<div class="deezerForm"><label>Nom du raccourci<input id="deezer-title" placeholder="Ma playlist préférée" maxlength="70"></label><label>Lien Deezer<input id="deezer-url" placeholder="https://www.deezer.com/..." inputmode="url"></label><button class="btn" data-action="add-deezer">Ajouter</button></div><p class="sub">Dans Deezer, utilise Partager → Copier le lien. Les liens sont enregistrés sur cet appareil uniquement.</p>`,true);
+}
+
+const kishtaKey='jarvisKishtaV08';
+const kishtaDefault={lastPaste:'2026-10-12',history:['2026-10-12'],photo:'',birthday:'',weight:'',nickname:'',notes:''};
+let kishta={...kishtaDefault};
+try{const saved=JSON.parse(localStorage.getItem(kishtaKey)||'null');if(saved&&typeof saved==='object')kishta={...kishta,...saved}}catch(e){}
+function kishtaSave(){try{localStorage.setItem(kishtaKey,JSON.stringify(kishta));return true}catch(e){alert('Sauvegarde impossible : espace de stockage insuffisant.');return false}}
+function kishtaToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+function kishtaDateAdd(date,days){const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10)}
+function kishtaDateLabel(date){return new Date(date+'T12:00:00Z').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})}
+function kishtaDays(){const today=kishtaToday();const next=kishtaDateAdd(kishta.lastPaste,2);return Math.round((Date.parse(next+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/86400000)}
+function kishtaStatus(){const days=kishtaDays();return days<0?'En retard de '+Math.abs(days)+' j':days===0?"Pâtée à donner aujourd’hui":'Prochaine pâtée '+(days===1?'demain':'dans '+days+' jours')}
+function kishtaAvatar(){return kishta.photo?`<img class="kishtaAvatar" src="${esc(kishta.photo)}" alt="Photo de Kishta">`:'<div class="kishtaAvatar kishtaFallback">🐈</div>'}
+function kishtaCard(){return card('🐈 Kishta',`<div class="kishtaMini">${kishtaAvatar()}<div><strong>Kishta</strong><div class="${kishtaDays()<=0?'kishtaDue':'soft'}">${esc(kishtaStatus())}</div><div class="sub">Tous les 2 jours</div></div></div><button class="btn" data-action="open-kishta">Ouvrir Kishta OS</button>`)}
+function kishtaBios(){
+ const angle=((Number(kishta.angle)||0)%4+4)%4;
+ const direction=['Profil droit','Face','Profil gauche','Dos'][angle];
+ const story=(kishta.anecdotes||[]).slice().reverse().slice(0,7).map(x=>`<div class="biosAnecdote"><span>✧ ${esc(x.date||'')}</span><strong>${esc(x.title||'Anecdote')}</strong><p>${esc(x.text||'')}</p></div>`).join('')||'<p class="sub">Aucune anecdote pour le moment. Raconte son premier exploit !</p>';
+ return `<div class="biosPanel"><div class="biosStage"><div class="biosScan"></div><div class="biosCat" data-angle="${angle}" role="img" aria-label="Hologramme animé de chat, orientation ${direction}"><svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="catFill" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#51edff" stop-opacity=".36"/><stop offset="1" stop-color="#2da6d6" stop-opacity=".07"/></linearGradient></defs><ellipse cx="131" cy="181" rx="79" ry="9" fill="none" stroke="#55dfff" stroke-dasharray="6 5" opacity=".7"/><g class="catWalk" fill="url(#catFill)" stroke="#78efff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path class="catTail" d="M173 124 Q233 122 213 56 Q201 35 196 58" fill="none" stroke-width="11"/><ellipse cx="135" cy="122" rx="60" ry="36"/><g class="catLegA"><path d="M96 145 L88 180 L104 180 L116 146Z"/></g><g class="catLegB"><path d="M155 145 L150 180 L167 180 L173 140Z"/></g><path d="M79 103 L57 91 L53 48 L75 63 L92 49 L115 91 L111 111Z"/><path d="M63 88 Q78 82 92 90" fill="none" stroke-width="2"/><circle class="catEye" cx="68" cy="91" r="3.6" fill="#baff9c" stroke="none"/><circle class="catEye" cx="96" cy="91" r="3.6" fill="#baff9c" stroke="none"/><path d="M81 102 l5 4 l5 -4" fill="none" stroke-width="2"/><path d="M83 108 l-24 4 M90 108 l23 4" fill="none" stroke-width="1.5"/></g></svg></div><div class="biosHUD">KISHTA // BIOS<br><span>HOLO-PET 01 · ${direction.toUpperCase()}</span></div></div><div class="biosControls"><button class="btn" data-action="kishta-turn-left" aria-label="Pivoter Kishta vers la gauche">↶ Pivoter</button><span class="sub">${direction} · Animation stylisée</span><button class="btn" data-action="kishta-turn-right" aria-label="Pivoter Kishta vers la droite">Pivoter ↷</button></div><div class="biosMood"><span>😴 Sieste : maximale</span><span>👑 Territoire : sous contrôle</span><span>💚 Humeur : royale</span></div><p class="sub">Indicateurs fictifs et ludiques, pas des mesures de santé.</p><h3>✧ Journal des anecdotes</h3><div class="biosAnecdotes">${story}</div><div class="biosForm"><label>Légende<input id="kishta-story-title" maxlength="65" placeholder="La conquête du canapé"></label><label>Anecdote<textarea id="kishta-story-text" maxlength="500" rows="2" placeholder="Ce qu'a fait Kishta…"></textarea></label><button class="btn" data-action="kishta-add-story">＋ Ajouter l'anecdote</button></div></div>`;
+}
+function kishtaPage(){return card('🐈 Kishta OS · Profil',`<div class="kishtaProfile">${kishtaAvatar()}<div><div class="big">Kishta</div><div class="soft">👑 Reine de la maison</div><label class="kishtaUpload">Changer la photo<input id="kishta-photo" type="file" accept="image/*"></label></div></div><div class="kishtaForm"><label>Surnom<input id="kishta-nickname" maxlength="80" value="${esc(kishta.nickname)}" placeholder="Son petit surnom"></label><label>Anniversaire<input id="kishta-birthday" type="date" value="${esc(kishta.birthday)}"></label><label>Poids (kg)<input id="kishta-weight" type="number" min="0" max="40" step="0.1" value="${esc(kishta.weight)}"></label><label>Notes / caractère<textarea id="kishta-notes" rows="3" maxlength="1200">${esc(kishta.notes)}</textarea></label></div><button class="btn" data-action="kishta-save-profile">Enregistrer la fiche</button>`,true)+card('🥣 Compteur pâtée · 1 tous les 2 jours',`<div class="kishtaStatus ${kishtaDays()<=0?'kishtaDue':''}">${esc(kishtaStatus())}</div><div class="kishtaMetrics"><div><span>Dernière pâtée</span><strong>${kishtaDateLabel(kishta.lastPaste)}</strong></div><div><span>Prochaine pâtée</span><strong>${kishtaDateLabel(kishtaDateAdd(kishta.lastPaste,2))}</strong></div></div><button class="btn" data-action="kishta-fed">✓ Pâtée donnée aujourd'hui</button><p class="sub">Une seule distribution enregistrée par jour. Le suivi fonctionne par jours calendaires (tous les 2 jours), pas par heure précise.</p><div class="kishtaForm"><label>Corriger la dernière date<input type="date" id="kishta-last" value="${esc(kishta.lastPaste)}" max="${kishtaToday()}"></label><button class="btn" data-action="kishta-correct">Corriger la date</button></div>`,false)+card('📋 Historique des pâtées',`<div class="kishtaHistory">${[...new Set(kishta.history||[])].sort().reverse().slice(0,12).map(d=>`<div>✓ ${kishtaDateLabel(d)}</div>`).join('')||'<div class="soft">Aucune distribution enregistrée</div>'}</div><p class="sub">Historique stocké uniquement sur cet appareil.</p>`,true)+card('◈ Kishta BIOS · Hologramme',kishtaBios(),true)}
+function home(){return [
+weatherCard(),
+trainCard(),
+agendaPreview(),
+benficaCard(),
+kishtaCard()
+].join('')}
+function page(){if(state.tab==='Accueil')return home();if(state.tab==='EPS')return epsPage();if(state.tab==='Sport')return gymPage();if(state.tab==='Benfica')return benficaPage();if(state.tab==='Multimédia')return deezerPage();if(state.tab==='Kishta')return kishtaPage();return card('⚙ Préférences',`<label for="city" class="soft">Ville pour la météo</label><div class="row" style="margin-top:12px"><input id="city" class="input" maxlength="60" value="${esc(state.city)}" placeholder="Paris"><button class="btn" data-action="city">Enregistrer</button></div><p class="sub">Cette préférence est sauvegardée uniquement dans ce navigateur. La synchronisation multi-appareils viendra plus tard.</p>`,true)+card('🚆 Connexion Transilien',`<label for="trainEndpoint" class="soft">URL HTTPS de ton service d’horaires (sans clé API dans l’URL)</label><div class="row" style="margin-top:12px"><input id="trainEndpoint" class="input" style="width:min(100%,520px)" value="${esc(state.trainEndpoint)}" placeholder="https://.../api/trains"><button class="btn" data-action="train-endpoint">Enregistrer</button></div><p class="sub">Le service doit renvoyer du JSON avec deux tableaux « paris » et « pontoise », chacun contenant des objets {time, destination, status, line}. Pour afficher H et C, le Worker doit transmettre les deux lignes et leur code. Ne colle jamais de clé PRIM ici : le dépôt GitHub est public.</p>`,true)+card('ℹ Version','<div class="soft">V0.10 · Trains H + RER C (affichage mixte), Kishta BIOS animé et journal des anecdotes, compteur pâtée, bandeau ONLINE, Deezer dans Multimédia, accueil compact, Benfica automatique, musculation locale, Assistant EPS et agenda. Connexion iCloud reportée. Météo et Transilien conservés.</div>')}
+function render(){document.body.classList.toggle('homeView',state.tab==='Accueil');document.body.classList.toggle('kishtaView',state.tab==='Kishta');$('systemBanner').hidden=state.tab!=='Accueil';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.tab));$('pageTitle').textContent=({'Accueil':'CENTRE DE CONTRÔLE','EPS':'ESPACE EPS','Sport':'CENTRE SPORTIF','Benfica':'SL BENFICA','Multimédia':'MULTIMÉDIA','Kishta':'KISHTA','Réglages':'PARAMÈTRES'})[state.tab];$('cards').innerHTML=page()}
+document.addEventListener('change',async e=>{
+ if(e.target?.id!=='kishta-photo')return;
+ const file=e.target.files?.[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Choisis une image.');return}
+ try{const img=new Image(),src=URL.createObjectURL(file);await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=src});
+ const canvas=document.createElement('canvas');canvas.width=320;canvas.height=320;const ctx=canvas.getContext('2d');const side=Math.min(img.naturalWidth,img.naturalHeight);ctx.drawImage(img,(img.naturalWidth-side)/2,(img.naturalHeight-side)/2,side,side,0,0,320,320);URL.revokeObjectURL(src);
+ const prev=kishta.photo;kishta.photo=canvas.toDataURL('image/jpeg',.72);if(!kishtaSave()){kishta.photo=prev;return}render()
+ }catch(err){alert('Impossible de lire cette image. Essaie une photo JPEG ou PNG.')}
+});
+document.addEventListener('change',e=>{
+ if(e.target?.id==='eps-course'){epsSelected=e.target.value;render()}
+});
+document.addEventListener('click',e=>{let t=e.target.closest('[data-tab]');if(t){state.tab=t.dataset.tab;render()}let a=e.target.closest('[data-action]');if(!a)return;if(a.dataset.action==='kishta-turn-left'||a.dataset.action==='kishta-turn-right'){
+ kishta.angle=((Number(kishta.angle)||0)+(a.dataset.action==='kishta-turn-left'?3:1))%4;kishtaSave();render();return
+}
+if(a.dataset.action==='kishta-add-story'){
+ const title=$('kishta-story-title')?.value.trim(),story=$('kishta-story-text')?.value.trim();
+ if(!title||!story){alert('Ajoute une légende et une anecdote.');return}
+ kishta.anecdotes=[...(kishta.anecdotes||[]),{date:kishtaToday(),title,text:story}].slice(-40);
+ if(kishtaSave())render();return
+}
+if(a.dataset.action==='kishta-fed'){
+ const today=kishtaToday();if(kishta.lastPaste===today){alert('La pâtée est déjà enregistrée pour aujourd’hui.');return}
+ if(kishtaDays()>0&&!confirm('La prochaine pâtée est prévue le '+kishtaDateLabel(kishtaDateAdd(kishta.lastPaste,2))+'. Enregistrer une distribution anticipée ?'))return;
+ kishta.lastPaste=today;kishta.history=[...new Set([...(kishta.history||[]),today])].sort().slice(-100);kishtaSave();render();return
+}
+if(a.dataset.action==='kishta-correct'){
+ const date=$('kishta-last')?.value;if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>kishtaToday()){alert('Choisis une date valide, non future.');return}
+ kishta.lastPaste=date;kishta.history=[...new Set([...(kishta.history||[]),date])].sort().slice(-100);kishtaSave();render();return
+}
+if(a.dataset.action==='kishta-save-profile'){
+ kishta.nickname=$('kishta-nickname').value.trim();kishta.birthday=$('kishta-birthday').value;kishta.weight=$('kishta-weight').value;kishta.notes=$('kishta-notes').value.trim();if(kishtaSave())alert('Fiche Kishta enregistrée.');render();return
+}
+if(a.dataset.action==='open-kishta'){state.tab='Kishta';render();return}if(a.dataset.action==='open-deezer'){state.tab='Multimédia';render();return}
+if(a.dataset.action==='add-deezer'){
+ const title=$('deezer-title')?.value.trim(),url=deezerUrl($('deezer-url')?.value.trim());
+ if(!title||!url){alert('Saisis un nom et un lien Deezer HTTPS valide.');return}
+ if(deezerLinks.length>=12){alert('Limite de 12 raccourcis atteinte.');return}
+ deezerLinks.push({title,url});try{localStorage.setItem(deezerKey,JSON.stringify(deezerLinks))}catch(e){alert('Impossible de sauvegarder sur cet appareil.')}
+ render();return
+}
+if(a.dataset.action==='delete-deezer'){
+ const i=Number(a.dataset.index);if(!Number.isInteger(i)||i<0||i>=deezerLinks.length)return;
+ deezerLinks.splice(i,1);localStorage.setItem(deezerKey,JSON.stringify(deezerLinks));render();return
+}
+if(a.dataset.action==='open-benfica'){state.tab='Benfica';render();return}if(a.dataset.action==='refresh-benfica'){fetchBenfica(true);return}if(a.dataset.action==='open-gym'){state.tab='Sport';render();return}if(a.dataset.action==='gym-add'){gymAdd();return}if(a.dataset.action==='gym-export'){gymExport();return}if(a.dataset.action==='gym-delete'){if(!confirm('Supprimer cet exercice de l’historique ?'))return;gymEntries=gymEntries.filter(x=>x.id!==a.dataset.id);localStorage.setItem(gymKey,JSON.stringify(gymEntries));render();return}if(a.dataset.action==='open-agenda'){state.tab='EPS';render();return}
+ if(a.dataset.action==='prepare-eps'){
+ const c=nextEPSCourse();if(c){epsSelected=c.id;render();$('eps-course')?.scrollIntoView({behavior:'smooth',block:'center'})}
+ else alert('Aucun prochain cours EPS trouvé dans les 15 jours.');
+ return
+ }
+ if(a.dataset.action==='save-eps'){epsSave();return}
+ if(a.dataset.action==='copy-eps'){
+ const value=epsText();
+ if(navigator.clipboard?.writeText){navigator.clipboard.writeText(value).then(()=>{$('eps-feedback').textContent='Fiche copiée.'}).catch(()=>prompt('Copie ta fiche :',value))}
+ else prompt('Copie ta fiche :',value);
+ return
+ }
+ if(a.dataset.action==='clear-eps'){
+ if(!confirm('Effacer la fiche de ce créneau EPS ?'))return;
+ delete epsLessons[epsSelected];localStorage.setItem(epsStorageKey,JSON.stringify(epsLessons));render();return
+ }
+ if(a.dataset.action==='add-event'){
+ const date=$('eventDate')?.value,title=$('eventTitle')?.value.trim(),start=$('eventStart')?.value,end=$('eventEnd')?.value,place=$('eventPlace')?.value.trim();
+ if(!date||!title||!start||!end||end<=start){alert('Renseigne une date, un intitulé et des horaires valides.');return}
+ if(personalEvents.length>=300){alert('Limite de 300 événements atteinte.');return}
+ personalEvents.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),date,title,start,end,place});
+ localStorage.setItem(scheduleKey,JSON.stringify(personalEvents));render();return
+ }
+ if(a.dataset.action==='delete-event'){if(!confirm('Supprimer cet événement personnel ?'))return;personalEvents=personalEvents.filter(x=>x.id!==a.dataset.id);localStorage.setItem(scheduleKey,JSON.stringify(personalEvents));render();return}
+ if(a.dataset.action==='refresh')fetchWeather();if(a.dataset.action==='transit'){state.tab='Réglages';render()}if(a.dataset.action==='trains-refresh')fetchTrains();if(a.dataset.action==='train-endpoint'){let v=$('trainEndpoint').value.trim();if(v&&!/^https:\/\//.test(v)){alert('Utilise une adresse HTTPS.');return}state.trainEndpoint=v;localStorage.setItem('jarvisTrainEndpoint',v);fetchTrains()} if(a.dataset.action==='city'){let v=$('city').value.trim();if(v){state.city=v;localStorage.setItem('jarvisCity',v);state.weather=null;state.tab='Accueil';render();fetchWeather()}}});
+function describe(code){if(code===0)return ['☀','Ciel dégagé'];if(code<=3)return ['⛅','Partiellement nuageux'];if(code<=48)return ['🌫','Brume ou brouillard'];if(code<=67)return ['🌧','Pluie'];if(code<=77)return ['❄','Neige'];if(code<=82)return ['🌦','Averses'];if(code<=86)return ['❄','Averses de neige'];if(code>=95)return ['⛈','Orages'];return ['☁','Conditions variables']}
+async function fetchWeather(){try{state.weatherError='';const g=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(state.city)+'&count=1&language=fr&format=json');if(!g.ok)throw Error('Service de géolocalisation indisponible');const gj=await g.json();if(!gj.results?.length)throw Error('Ville introuvable');const loc=gj.results[0];const u='https://api.open-meteo.com/v1/forecast?latitude='+loc.latitude+'&longitude='+loc.longitude+'&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto';const r=await fetch(u);if(!r.ok)throw Error('Service météo indisponible');const j=await r.json();const [icon,description]=describe(j.current.weather_code);state.weather={temp:j.current.temperature_2m,wind:j.current.wind_speed_10m,icon,description};}catch(e){state.weather=null;state.weatherError='Météo indisponible : '+e.message+'. Vérifie ta connexion.'}render()}
+render();fetchWeather();fetchTrains();fetchBenfica();setInterval(fetchBenfica,10*60*1000);setInterval(()=>{if(state.tab==='Accueil'||state.tab==='Benfica')render()},60*1000);setInterval(fetchWeather,15*60*1000);setInterval(()=>{if(state.trainEndpoint)fetchTrains()},60*1000);if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
+
